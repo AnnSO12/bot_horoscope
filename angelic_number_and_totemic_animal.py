@@ -1,5 +1,3 @@
-
-
 def get_zodiac_sign_t(day: int, month: int) -> str:
     if (month == 12 and day >= 22) or (month == 1 and day <= 20):
         return "Козерог"
@@ -119,56 +117,6 @@ def get_angel_number_text(day: int, month: int, year: int) -> str:
     return angel_numbers.get(triple, "🔍 Ангельское число не найдено, попробуйте ещё раз.")
 
 
-@bot.message_handler(commands=['start'])
-def send_welcome(message):
-    bot.send_message(message.chat.id,
-                     "👋 Привет! Я астробот. Напиши свою дату рождения в формате ДД.ММ или ДД.ММ.ГГГГ.")
 
-
-@bot.message_handler(func=lambda message: True)
-def handle_message(message):
-    global dd, mm, yy
-    try:
-        if message.text in ["🔮 Обычный гороскоп", "💼 Рабочий гороскоп",
-                            "❤️ Любовный гороскоп", "🐺 Тотемное животное",
-                            "🧮 Ангельское число", "💑 Совместимость"]:
-            handle_choice(message)
-            return
-
-        if message.text == 'Совместимость по именам':
-            bot.send_message(message.chat.id, 'Введите первое имя:')
-            return
-
-        if message.text == 'Совместимость по знакам зодиака':
-            bot.send_message(message.chat.id, 'Введите дату рождения мальчика (ДД.ММ):')
-            return
-
-        if '.' in message.text:
-            parts = message.text.strip().split('.')
-            if len(parts) == 2:
-                day, month = map(int, parts)
-                if 1 <= day <= 31 and 1 <= month <= 12:
-                    dd, mm = day, month
-                    sign = get_zodiac_sign_t(dd, mm)
-                    bot.send_message(message.chat.id,
-                                     f"✨ Ваш знак зодиака: {sign}\nВыберите действие:",
-                                     reply_markup=keyboard)
-                else:
-                    bot.send_message(message.chat.id, "❌ Некорректная дата. Попробуйте снова.")
-                return
-
-            elif len(parts) == 3:
-                day, month, year = map(int, parts)
-                if 1 <= day <= 31 and 1 <= month <= 12 and 1900 <= year <= datetime.datetime.now().year:
-                    dd, mm, yy = day, month, year
-                    bot.send_message(message.chat.id, "✅ Дата сохранена. Теперь выбери: 🧮 Ангельское число.")
-                else:
-                    bot.send_message(message.chat.id, "❌ Некорректная дата. Используйте формат ДД.ММ.ГГГГ.")
-                return
-        else:
-            bot.send_message(message.chat.id, "❌ Неверный формат. Используйте ДД.ММ или ДД.ММ.ГГГГ")
-
-    except Exception:
-        bot.send_message(message.chat.id, "❌ Ошибка обработки запроса")
 
 

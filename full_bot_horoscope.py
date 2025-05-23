@@ -344,7 +344,7 @@ def handle_subscribe(message):
     bot.send_message(
         message.chat.id,
         f"✅ Вы подписались на ежедневный гороскоп для {get_zodiac_sign_display1(dd, mm)}!\n"
-        f"Гороскоп будет приходить ежедневно в 9:00 утра.",
+        f"Гороскоп будет приходить ежедневно в 9:00 утра по Московскому времени.",
         reply_markup=keyboard
     )
 
